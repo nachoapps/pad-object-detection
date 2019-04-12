@@ -126,7 +126,7 @@ def process_images(data, image_dir, output_dir):
     results = []
 
     for obj in orb_annotations:
-        class_text = obj['name']
+        class_text = 'orb'
 
         xmin = float(obj['bndbox']['xmin']) / width
         ymin = float(obj['bndbox']['ymin']) / height
@@ -191,15 +191,7 @@ def do_orb_processing(image_dir, orb_output_path, annotation_files, orb_bucket_p
                 gcs_file_path = 'gs://{}/{}/{}'.format(orb_bucket_path, final_label_dir, orb_filename)
                 csv_writer.writerow([gcs_file_path, label])
 
-
-    print('you probably want to execute:')
-    print('  gsutil -m rsync -r {} gs://{}/{}'.format(orb_output_path, orb_bucket_path, last_output_path))
-
-    print('consider running this command to force-sync the remote dir:')
-    print('  gsutil -m rsync -r -d {} gs://{}/{}'.format(orb_output_path, orb_bucket_path, last_output_path))
-
-    print('the CSV file will be available at:')
-    print('  gs://{}/{}/orb_data.csv'.format(orb_bucket_path, last_output_path))
+    print_gsutil_help(orb_output_path, orb_bucket_path, last_output_path, 'orb_data.csv')
 
 
 def pr(num):
@@ -227,15 +219,18 @@ def do_screen_processing(image_dir, screen_output_path, annotation_files, screen
                                      pr(item[3]), pr(item[4]), '', '',
                                      pr(item[5]), pr(item[6]), '', ''])
 
+    print_gsutil_help(screen_output_path, screen_bucket_path, last_output_path, 'screen_data.csv')
 
+
+def print_gsutil_help(local_path, bucket_path, bucket_folder, csv_file_name):
     print('you probably want to execute:')
-    print('  gsutil -m rsync -r {} gs://{}/{}'.format(screen_output_path, screen_bucket_path, last_output_path))
+    print('  gsutil -m rsync -r -c {} gs://{}/{}'.format(local_path, bucket_path, bucket_folder))
 
     print('consider running this command to force-sync the remote dir:')
-    print('  gsutil -m rsync -r -d {} gs://{}/{}'.format(screen_output_path, screen_bucket_path, last_output_path))
+    print('  gsutil -m rsync -r -c -d {} gs://{}/{}'.format(local_path, bucket_path, bucket_folder))
 
     print('the CSV file will be available at:')
-    print('  gs://{}/{}/screen_data.csv'.format(screen_bucket_path, last_output_path))
+    print('  gs://{}/{}/{}'.format(bucket_path, bucket_folder, csv_file_name))
 
 
 def main(_):
