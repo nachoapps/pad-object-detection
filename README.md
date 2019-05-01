@@ -129,3 +129,15 @@ https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc
 Check out the [commands](scripts/README.md) I've provided. These allow you to
 generate the training data, train the model, run evaluation, export a frozen
 model, and run inference on an arbitrary image.
+
+# Cloud training
+
+You can actually train these models on the Cloud via TPU usage, but I haven't tried that.
+I have tried using Google's Cloud Vision AutoML product. You can find instructions on how
+to use that in the cloud_vision directory. 
+
+Unfortunately their object detection models are not yet exportable, but I've tested it 
+and the quality is good (just expensive).
+
+Their classifier models ARE exportable, and I have trained one and put it in the models
+directory on Drive.
